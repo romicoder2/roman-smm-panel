@@ -1,0 +1,270 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document storing personal account information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "fullName": { "type": "string", "maxLength": 100 },
+        "username": { "type": "string", "maxLength": 50, "pattern": "^[a-zA-Z0-9_]+$" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "isBlocked": { "type": "boolean" },
+        "referralCode": { "type": "string", "maxLength": 32 },
+        "referredBy": { "type": "string" },
+        "vipPlanId": { "type": "string" },
+        "vipExpiry": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "fullName", "username", "role", "createdAt"]
+    },
+    "Wallet": {
+      "title": "Wallet",
+      "description": "User wallet storing balance in PKR",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "balance": { "type": "number" },
+        "totalDeposited": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "balance", "totalDeposited", "totalSpent"]
+    },
+    "WalletTransaction": {
+      "title": "WalletTransaction",
+      "description": "Immutable financial ledger transaction record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["deposit_credit", "order_deduction", "order_refund", "vip_purchase", "referral_reward", "admin_adjustment"] },
+        "amount": { "type": "number" },
+        "previousBalance": { "type": "number" },
+        "newBalance": { "type": "number" },
+        "referenceId": { "type": "string" },
+        "description": { "type": "string", "maxLength": 255 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "type", "amount", "previousBalance", "newBalance", "createdAt"]
+    },
+    "Deposit": {
+      "title": "Deposit",
+      "description": "Deposit request submitted by user for manual verification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "username": { "type": "string" },
+        "paymentMethod": { "type": "string", "enum": ["JazzCash", "Easypaisa", "SadaPay"] },
+        "accountNumber": { "type": "string" },
+        "amount": { "type": "number" },
+        "transactionId": { "type": "string", "maxLength": 100 },
+        "screenshotUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminNotes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "verifiedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "paymentMethod", "amount", "transactionId", "status", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "SMM service order placed by user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "serviceName": { "type": "string" },
+        "targetLink": { "type": "string", "maxLength": 1000 },
+        "quantity": { "type": "number" },
+        "pricePer1000": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "vipDiscount": { "type": "number" },
+        "promoDiscount": { "type": "number" },
+        "finalPrice": { "type": "number" },
+        "promoCode": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "processing", "in_progress", "completed", "partial", "cancelled", "refunded"] },
+        "adminNotes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "serviceId", "serviceName", "targetLink", "quantity", "finalPrice", "status", "createdAt"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "SMM service offering configured in catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "name": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "pricePer1000": { "type": "number" },
+        "minQuantity": { "type": "number" },
+        "maxQuantity": { "type": "number" },
+        "estimatedTime": { "type": "string", "maxLength": 100 },
+        "isActive": { "type": "boolean" },
+        "linkType": { "type": "string", "enum": ["video", "profile", "channel", "general"] }
+      },
+      "required": ["id", "categoryId", "name", "pricePer1000", "minQuantity", "maxQuantity", "isActive"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Service categories like TikTok, Instagram, YouTube",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "icon": { "type": "string" },
+        "order": { "type": "number" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["id", "name", "isActive"]
+    },
+    "VipPlan": {
+      "title": "VipPlan",
+      "description": "VIP membership plan definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "durationDays": { "type": "number" },
+        "discountPercentage": { "type": "number" },
+        "benefits": { "type": "array" },
+        "badgeColor": { "type": "string" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["id", "name", "price", "discountPercentage", "isActive"]
+    },
+    "PromoCode": {
+      "title": "PromoCode",
+      "description": "Promotional discount codes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string", "maxLength": 50 },
+        "discountType": { "type": "string", "enum": ["percentage", "fixed"] },
+        "discountValue": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "maxDiscount": { "type": "number" },
+        "usageLimit": { "type": "number" },
+        "usedCount": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "expiresAt": { "type": "string" }
+      },
+      "required": ["id", "code", "discountType", "discountValue", "isActive"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "User customer support ticket",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "subject": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "status": { "type": "string", "enum": ["open", "in_progress", "resolved", "closed"] },
+        "messages": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "subject", "status", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User or Admin notification alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string", "enum": ["info", "success", "warning", "order", "deposit", "vip"] },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "message", "isRead", "createdAt"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Global website configuration",
+      "type": "object",
+      "properties": {
+        "siteName": { "type": "string" },
+        "brandName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "announcement": { "type": "string" },
+        "whatsappUrl": { "type": "string" },
+        "paymentJazzCash": { "type": "string" },
+        "paymentEasypaisa": { "type": "string" },
+        "paymentSadaPay": { "type": "string" },
+        "accountHolder": { "type": "string" },
+        "maintenanceMode": { "type": "boolean" },
+        "currency": { "type": "string" }
+      },
+      "required": ["siteName", "currency"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private user profiles"
+    },
+    "/wallets/{userId}": {
+      "schema": "Wallet",
+      "description": "User wallets storing balances"
+    },
+    "/wallet_transactions/{txId}": {
+      "schema": "WalletTransaction",
+      "description": "Immutable ledger of financial movements"
+    },
+    "/deposits/{depositId}": {
+      "schema": "Deposit",
+      "description": "Manual deposit requests submitted by users"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "SMM orders placed by users"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Service categories"
+    },
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "Individual SMM services"
+    },
+    "/vip_plans/{planId}": {
+      "schema": "VipPlan",
+      "description": "VIP membership plan tiers"
+    },
+    "/promo_codes/{codeId}": {
+      "schema": "PromoCode",
+      "description": "Promotional discount codes"
+    },
+    "/support_tickets/{ticketId}": {
+      "schema": "SupportTicket",
+      "description": "Customer support tickets"
+    },
+    "/notifications/{notifId}": {
+      "schema": "Notification",
+      "description": "User alerts and announcements"
+    },
+    "/settings/config": {
+      "schema": "SystemSetting",
+      "description": "Global platform configurations and payment account info"
+    }
+  }
+}

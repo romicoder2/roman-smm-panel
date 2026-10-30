@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #05070d;
+    color: #e2e8f0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Neon & Glassmorphism Utilities */
+.neon-glow-cyan {
+  box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.4), 0 0 10px -2px rgba(6, 182, 212, 0.3);
+}
+
+.neon-glow-blue {
+  box-shadow: 0 0 25px -4px rgba(59, 130, 246, 0.45), 0 0 12px -2px rgba(14, 165, 233, 0.3);
+}
+
+.neon-border-cyan {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: inset 0 0 15px rgba(6, 182, 212, 0.15), 0 0 15px rgba(6, 182, 212, 0.25);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(8, 12, 22, 0.85) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  border-color: rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.25);
+}
+
+.glass-dropdown {
+  background: rgba(11, 15, 25, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #070a12;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0ea5e9;
+}
